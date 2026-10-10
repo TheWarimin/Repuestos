@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: repuestos-automotrices
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: .
+    buildCommand: npm run build && npx prisma db push --schema=server/prisma/schema.prisma
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: repuestos-db
+          property: connectionString
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: MP_ACCESS_TOKEN
+        sync: false
+      - key: MP_WEBHOOK_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+
+databases:
+  - name: repuestos-db
+    databaseName: repuestos
+    user: repuestos_user
+    region: oregon
+    plan: free
