@@ -19,6 +19,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const userRoutes = require('./routes/userRoutes');
+const imageRoutes = require('./routes/imageRoutes');
 
 connectDB();
 
@@ -60,6 +61,8 @@ const authLimiter = rateLimit({
   message: { message: 'Demasiados intentos. Inténtalo de nuevo en 15 minutos.' },
 });
 
+// Las imágenes se sirven antes del limitador global para no consumir su cuota
+app.use('/api/images', imageRoutes);
 app.use('/api/', globalLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));

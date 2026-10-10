@@ -1,7 +1,6 @@
 ﻿const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const prisma = require('../utils/prisma');
-const { cloudinary } = require('../utils/cloudinary');
 const { mapProduct } = require('../utils/mappers');
 
 function slugify(name) {
@@ -245,7 +244,10 @@ const uploadImage = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('No se proporcionó ninguna imagen');
   }
-  res.json({ url: req.file.path, publicId: req.file.filename });
+  const image = await prisma.storedImage.create({
+    data: { data: req.file.buffer, mimeType: req.file.mimetype },
+  });
+  res.json({ url: `/api/images/${image.id}`, publicId: String(image.id) });
 });
 
 // DELETE /api/products/delete-image (admin)
@@ -255,7 +257,7 @@ const deleteImage = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Se requiere el publicId');
   }
-  await cloudinary.uploader.destroy(publicId);
+  await prisma.storedImage.deleteMany({ where: { id: parseInt(publicId) || 0 } });
   res.json({ message: 'Imagen eliminada' });
 });
 

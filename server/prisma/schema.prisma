@@ -92,6 +92,13 @@ model Product {
   orderItems         OrderItem[]
 }
 
+model StoredImage {
+  id        Int      @id @default(autoincrement())
+  data      Bytes
+  mimeType  String
+  createdAt DateTime @default(now())
+}
+
 model ProductImage {
   id        Int     @id @default(autoincrement())
   productId Int

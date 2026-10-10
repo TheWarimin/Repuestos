@@ -12,7 +12,7 @@ const {
   deleteImage,
 } = require('../controllers/productController');
 const { verifyToken, isAdmin } = require('../middleware/auth');
-const { upload } = require('../utils/cloudinary');
+const { upload } = require('../utils/upload');
 
 // Rutas públicas
 router.get('/', getProducts);
