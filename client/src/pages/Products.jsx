@@ -141,7 +141,7 @@ export default function Products() {
   return (
     <>
       <Helmet>
-        <title>Productos — RepuestosCL</title>
+        <title>Productos — Dreyes</title>
         <meta name="description" content="Explora nuestra amplia selección de repuestos automotrices para todo tipo de vehículos." />
       </Helmet>
 

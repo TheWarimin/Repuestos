@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>RepuestosCL — Tu tienda de repuestos automotrices en Chile</title>
+        <title>Dreyes — Tu tienda de repuestos automotrices en Chile</title>
         <meta name="description" content="Encuentra los mejores repuestos automotrices para tu vehículo. Frenos, motor, suspensión, eléctrico y más. Envío a todo Chile." />
       </Helmet>
 

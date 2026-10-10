@@ -79,7 +79,7 @@ export default function AdminCategories() {
   return (
     <>
       <Helmet>
-        <title>Categorías — Admin RepuestosCL</title>
+        <title>Categorías — Admin Dreyes</title>
       </Helmet>
 
       <div>

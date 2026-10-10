@@ -40,7 +40,7 @@ export default function CheckoutSuccess({ status }) {
       <Helmet>
         <title>
           {resolvedStatus === 'success' ? 'Pago exitoso' : resolvedStatus === 'failure' ? 'Pago fallido' : 'Pago pendiente'}{' '}
-          — RepuestosCL
+          — Dreyes
         </title>
       </Helmet>
 

@@ -48,7 +48,7 @@ export default function AdminProducts() {
   return (
     <>
       <Helmet>
-        <title>Productos — Admin RepuestosCL</title>
+        <title>Productos — Admin Dreyes</title>
       </Helmet>
 
       <div>

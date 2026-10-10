@@ -84,7 +84,7 @@ export default function AdminOrderDetail() {
   return (
     <>
       <Helmet>
-        <title>Pedido #{order._id.slice(-8).toUpperCase()} — Admin RepuestosCL</title>
+        <title>Pedido #{order._id.slice(-8).toUpperCase()} — Admin Dreyes</title>
       </Helmet>
 
       <div>

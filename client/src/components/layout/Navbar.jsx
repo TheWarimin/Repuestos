@@ -41,7 +41,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">
             <span className="text-2xl">🔧</span>
-            <span className="text-xl font-bold text-primary-700 hidden sm:block">RepuestosCL</span>
+            <span className="text-xl font-bold text-primary-700 hidden sm:block">Dreyes</span>
           </Link>
 
           {/* Nav links — desktop */}

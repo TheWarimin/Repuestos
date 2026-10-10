@@ -77,7 +77,7 @@ export default function AdminLayout() {
         {/* Logo */}
         <div className="flex items-center gap-2 px-6 h-16 border-b border-gray-700 flex-shrink-0">
           <span className="text-xl">🔧</span>
-          <span className="font-bold text-lg">RepuestosCL</span>
+          <span className="font-bold text-lg">Dreyes</span>
           <span className="ml-auto text-xs bg-amber-500 text-amber-900 px-1.5 py-0.5 rounded font-semibold">
             Admin
           </span>

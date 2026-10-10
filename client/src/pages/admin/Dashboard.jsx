@@ -45,7 +45,7 @@ export default function Dashboard() {
   return (
     <>
       <Helmet>
-        <title>Dashboard — Admin RepuestosCL</title>
+        <title>Dashboard — Admin Dreyes</title>
       </Helmet>
 
       <div>

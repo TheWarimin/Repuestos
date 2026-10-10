@@ -129,7 +129,7 @@ export default function ProductForm() {
   return (
     <>
       <Helmet>
-        <title>{isEditing ? 'Editar producto' : 'Nuevo producto'} — Admin RepuestosCL</title>
+        <title>{isEditing ? 'Editar producto' : 'Nuevo producto'} — Admin Dreyes</title>
       </Helmet>
 
       <div className="max-w-3xl">

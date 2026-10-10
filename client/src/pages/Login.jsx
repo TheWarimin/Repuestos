@@ -56,14 +56,14 @@ export default function Login() {
   return (
     <>
       <Helmet>
-        <title>Iniciar sesión — RepuestosCL</title>
+        <title>Iniciar sesión — Dreyes</title>
       </Helmet>
 
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12 bg-gray-50">
         <div className="card w-full max-w-md p-8">
           <div className="text-center mb-8">
             <Link to="/" className="inline-flex items-center gap-2 text-2xl font-bold text-primary-700 mb-4">
-              <span>🔧</span>RepuestosCL
+              <span>🔧</span>Dreyes
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">Iniciar sesión</h1>
             <p className="text-gray-500 text-sm mt-1">Accede a tu cuenta</p>

@@ -32,7 +32,7 @@ export default function Orders() {
   return (
     <>
       <Helmet>
-        <title>Mis pedidos — RepuestosCL</title>
+        <title>Mis pedidos — Dreyes</title>
       </Helmet>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">

@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <>
       <Helmet>
-        <title>Página no encontrada — RepuestosCL</title>
+        <title>Página no encontrada — Dreyes</title>
       </Helmet>
 
       <div className="max-w-lg mx-auto px-4 py-24 text-center">

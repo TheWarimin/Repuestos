@@ -55,7 +55,7 @@ export default function ProductDetail() {
   return (
     <>
       <Helmet>
-        <title>{product.name} — RepuestosCL</title>
+        <title>{product.name} — Dreyes</title>
         <meta name="description" content={product.description.substring(0, 160)} />
       </Helmet>
 

@@ -41,7 +41,7 @@ export default function AdminOrders() {
   return (
     <>
       <Helmet>
-        <title>Pedidos — Admin RepuestosCL</title>
+        <title>Pedidos — Admin Dreyes</title>
       </Helmet>
 
       <div>

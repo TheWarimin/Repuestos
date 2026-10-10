@@ -11,7 +11,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🔧</span>
-              <span className="text-xl font-bold text-white">RepuestosCL</span>
+              <span className="text-xl font-bold text-white">Dreyes</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Tu tienda de confianza para repuestos automotrices. Calidad garantizada y los mejores
@@ -47,7 +47,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
                 <span>📧</span>
-                <span>contacto@repuestoscl.cl</span>
+                <span>contacto@Dreyes.cl</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>📞</span>
@@ -69,7 +69,7 @@ export default function Footer() {
         <hr className="border-gray-700 my-8" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <p>© {year} RepuestosCL. Todos los derechos reservados.</p>
+          <p>© {year} Dreyes. Todos los derechos reservados.</p>
           <div className="flex items-center gap-2">
             <span>Pagos seguros con</span>
             <span className="bg-gray-700 text-gray-200 px-2 py-0.5 rounded text-xs font-medium">MercadoPago</span>
