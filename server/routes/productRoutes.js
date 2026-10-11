@@ -4,6 +4,7 @@ const {
   getProducts,
   getFeaturedProducts,
   getProductBySlug,
+  getProductById,
   getAllProductsAdmin,
   createProduct,
   updateProduct,
@@ -21,6 +22,7 @@ router.get('/slug/:slug', getProductBySlug);
 
 // Rutas admin
 router.get('/admin/all', verifyToken, isAdmin, getAllProductsAdmin);
+router.get('/:id', verifyToken, isAdmin, getProductById);
 router.post('/', verifyToken, isAdmin, createProduct);
 router.put('/:id', verifyToken, isAdmin, updateProduct);
 router.delete('/:id', verifyToken, isAdmin, deleteProduct);

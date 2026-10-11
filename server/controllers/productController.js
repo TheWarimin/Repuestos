@@ -96,6 +96,19 @@ const getProductBySlug = asyncHandler(async (req, res) => {
   res.json(mapProduct(product));
 });
 
+// GET /api/products/:id (admin)
+const getProductById = asyncHandler(async (req, res) => {
+  const id = parseInt(req.params.id);
+  const product = Number.isNaN(id)
+    ? null
+    : await prisma.product.findUnique({ where: { id }, include: productInclude });
+  if (!product) {
+    res.status(404);
+    throw new Error('Producto no encontrado');
+  }
+  res.json(mapProduct(product));
+});
+
 // GET /api/products/admin
 const getAllProductsAdmin = asyncHandler(async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page) || 1);
@@ -265,6 +278,7 @@ module.exports = {
   getProducts,
   getFeaturedProducts,
   getProductBySlug,
+  getProductById,
   getAllProductsAdmin,
   createProduct,
   updateProduct,
