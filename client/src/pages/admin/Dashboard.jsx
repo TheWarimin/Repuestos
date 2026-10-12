@@ -91,7 +91,7 @@ export default function Dashboard() {
                       <tr key={order._id} className="hover:bg-gray-50">
                         <td className="py-2.5">
                           <Link to={`/admin/pedidos/${order._id}`} className="font-mono text-primary-600 hover:underline">
-                            #{order._id.slice(-8).toUpperCase()}
+                            #{String(order._id).slice(-8).toUpperCase()}
                           </Link>
                         </td>
                         <td className="py-2.5 text-gray-700">{order.user?.name || '—'}</td>

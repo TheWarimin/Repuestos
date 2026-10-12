@@ -51,7 +51,7 @@ export default function OrderDetail() {
   return (
     <>
       <Helmet>
-        <title>Pedido #{order._id.slice(-8).toUpperCase()} — Dreyes</title>
+        <title>Pedido #{String(order._id).slice(-8).toUpperCase()} — Dreyes</title>
       </Helmet>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -60,7 +60,7 @@ export default function OrderDetail() {
             ← Mis pedidos
           </Link>
           <h1 className="section-title !mb-0">
-            Pedido #{order._id.slice(-8).toUpperCase()}
+            Pedido #{String(order._id).slice(-8).toUpperCase()}
           </h1>
         </div>
 

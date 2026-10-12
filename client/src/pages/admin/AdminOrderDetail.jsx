@@ -84,7 +84,7 @@ export default function AdminOrderDetail() {
   return (
     <>
       <Helmet>
-        <title>Pedido #{order._id.slice(-8).toUpperCase()} — Admin Dreyes</title>
+        <title>Pedido #{String(order._id).slice(-8).toUpperCase()} — Admin Dreyes</title>
       </Helmet>
 
       <div>
@@ -93,7 +93,7 @@ export default function AdminOrderDetail() {
             ← Pedidos
           </Link>
           <h1 className="section-title !mb-0">
-            Pedido #{order._id.slice(-8).toUpperCase()}
+            Pedido #{String(order._id).slice(-8).toUpperCase()}
           </h1>
           <span className={`badge ${st.class} ml-auto`}>{st.label}</span>
         </div>

@@ -55,7 +55,7 @@ export default function Orders() {
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs text-gray-400">
-                        #{order._id.slice(-8).toUpperCase()} ·{' '}
+                        #{String(order._id).slice(-8).toUpperCase()} ·{' '}
                         {new Date(order.createdAt).toLocaleDateString('es-CL', {
                           day: '2-digit', month: 'long', year: 'numeric',
                         })}

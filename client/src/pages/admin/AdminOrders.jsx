@@ -93,7 +93,7 @@ export default function AdminOrders() {
                       return (
                         <tr key={order._id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 font-mono text-xs text-gray-700">
-                            #{order._id.slice(-8).toUpperCase()}
+                            #{String(order._id).slice(-8).toUpperCase()}
                           </td>
                           <td className="px-4 py-3 text-gray-700 hidden md:table-cell">
                             {order.user?.name || '—'}
