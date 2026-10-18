@@ -55,7 +55,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span>📍</span>
-                <span>Santiago, Chile</span>
+                <span>Av Vicuña Mackenna, 1080 Peñaflor, Metropolitana de Santiago</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span>🕒</span>
+                <span>Lunes a sábado: 9:00–18:00</span>
               </li>
             </ul>
             <div className="flex gap-3 mt-4">

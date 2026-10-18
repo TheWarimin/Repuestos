@@ -4,15 +4,33 @@ const prisma = require('../utils/prisma');
 const { mapOrder } = require('../utils/mappers');
 
 const orderItemInclude = { include: { product: { include: { images: true, compatibleVehicles: true, category: true } } } };
+const STORE_ADDRESS = {
+  street: 'Av. Vicuña Mackenna 1080',
+  city: 'Peñaflor',
+  region: 'Metropolitana de Santiago',
+  commune: 'Peñaflor',
+};
+
+const isBeforeSameDayCutoff = () => {
+  const hour = Number(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Santiago',
+      hour: '2-digit',
+      hourCycle: 'h23',
+    }).format(new Date())
+  );
+  return hour < 12;
+};
 
 // POST /api/orders
 const orderValidation = [
   body('items').isArray({ min: 1 }).withMessage('El pedido debe tener al menos un item'),
   body('items.*.product').notEmpty().withMessage('ID de producto requerido'),
   body('items.*.quantity').isInt({ min: 1 }).withMessage('Cantidad mínima es 1'),
-  body('shippingAddress.street').notEmpty().withMessage('La calle es obligatoria'),
-  body('shippingAddress.city').notEmpty().withMessage('La ciudad es obligatoria'),
-  body('shippingAddress.region').notEmpty().withMessage('La región es obligatoria'),
+  body('deliveryMethod').optional().isIn(['standard', 'same_day', 'pickup']).withMessage('Método de entrega no válido'),
+  body('shippingAddress.street').if((value, { req }) => req.body.deliveryMethod !== 'pickup').notEmpty().withMessage('La calle es obligatoria'),
+  body('shippingAddress.city').if((value, { req }) => req.body.deliveryMethod !== 'pickup').notEmpty().withMessage('La ciudad es obligatoria'),
+  body('shippingAddress.region').if((value, { req }) => req.body.deliveryMethod !== 'pickup').notEmpty().withMessage('La región es obligatoria'),
 ];
 
 const createOrder = [
@@ -24,6 +42,17 @@ const createOrder = [
     }
 
     const { items, shippingAddress, notes } = req.body;
+    const deliveryMethod = req.body.deliveryMethod || 'standard';
+
+    if (deliveryMethod === 'same_day' && !isBeforeSameDayCutoff()) {
+      return res.status(400).json({ message: 'El despacho en el día está disponible para compras antes de las 12:00 (hora de Chile).' });
+    }
+    if (
+      deliveryMethod === 'same_day' &&
+      shippingAddress.commune?.trim().localeCompare('Peñaflor', 'es', { sensitivity: 'base' }) !== 0
+    ) {
+      return res.status(400).json({ message: 'El despacho en el día está disponible solo en Peñaflor.' });
+    }
 
     const productIds = items.map((i) => parseInt(i.product));
     const products = await prisma.product.findMany({
@@ -55,22 +84,24 @@ const createOrder = [
       });
     }
 
-    const shippingCost = subtotal >= 50000 ? 0 : 3990;
+    const shippingCost = deliveryMethod === 'pickup' ? 0 : subtotal >= 50000 ? 0 : 3990;
     const total = subtotal + shippingCost;
+    const shippingAddressData = deliveryMethod === 'pickup' ? STORE_ADDRESS : shippingAddress;
 
     const order = await prisma.order.create({
       data: {
         userId: req.user.id,
         subtotal,
         shippingCost,
+        deliveryMethod,
         total,
         notes,
         recipientName: shippingAddress.recipientName,
-        street: shippingAddress.street,
-        city: shippingAddress.city,
-        region: shippingAddress.region,
-        commune: shippingAddress.commune,
-        postalCode: shippingAddress.postalCode,
+        street: shippingAddressData.street,
+        city: shippingAddressData.city,
+        region: shippingAddressData.region,
+        commune: shippingAddressData.commune,
+        postalCode: deliveryMethod === 'pickup' ? null : shippingAddress.postalCode,
         shippingPhone: shippingAddress.phone,
         items: { create: orderItems },
         statusHistory: { create: [{ status: 'pending', note: 'Pedido creado' }] },

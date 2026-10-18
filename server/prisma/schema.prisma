@@ -122,6 +122,7 @@ model Order {
   userId         Int
   subtotal       Float
   shippingCost   Float                @default(0)
+  deliveryMethod String               @default("standard")
   total          Float
   status         OrderStatus          @default(pending)
   paymentStatus  PaymentStatus        @default(pending)

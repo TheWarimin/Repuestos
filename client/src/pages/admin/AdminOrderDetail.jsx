@@ -136,13 +136,20 @@ export default function AdminOrderDetail() {
             </div>
 
             <div className="card p-5">
-              <h2 className="font-bold text-gray-900 mb-3">Dirección de envío</h2>
+              <h2 className="font-bold text-gray-900 mb-3">Entrega del pedido</h2>
               <address className="not-italic text-sm text-gray-600 space-y-1">
+                <p className="font-medium text-primary-700">
+                  {order.deliveryMethod === 'pickup'
+                    ? 'Retiro en tienda'
+                    : order.deliveryMethod === 'same_day'
+                      ? 'Despacho en el día'
+                      : 'Despacho a domicilio'}
+                </p>
                 <p className="font-medium text-gray-900">{order.shippingAddress.recipientName}</p>
-                <p>{order.shippingAddress.street}</p>
+                <p>{order.deliveryMethod === 'pickup' ? 'Dirección de retiro:' : ''} {order.shippingAddress.street}</p>
                 <p>{order.shippingAddress.commune}, {order.shippingAddress.city}</p>
                 <p>{order.shippingAddress.region}</p>
-                {order.shippingAddress.postalCode && <p>CP: {order.shippingAddress.postalCode}</p>}
+                {order.deliveryMethod !== 'pickup' && order.shippingAddress.postalCode && <p>CP: {order.shippingAddress.postalCode}</p>}
                 <p>📞 {order.shippingAddress.phone}</p>
               </address>
             </div>
@@ -184,6 +191,16 @@ export default function AdminOrderDetail() {
                     <span className="font-mono text-xs">{order.paymentId}</span>
                   </div>
                 )}
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Entrega</span>
+                  <span>
+                    {order.deliveryMethod === 'pickup'
+                      ? 'Retiro en tienda'
+                      : order.deliveryMethod === 'same_day'
+                        ? 'Despacho en el día'
+                        : 'A domicilio'}
+                  </span>
+                </div>
                 <hr className="border-gray-100" />
                 <div className="flex justify-between">
                   <span className="text-gray-500">Subtotal</span>
