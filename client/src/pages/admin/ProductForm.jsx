@@ -19,6 +19,8 @@ const initialForm = {
   isActive: true,
 };
 
+const emptyVehicle = { make: '', model: '', yearFrom: '', yearTo: '' };
+
 export default function ProductForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ export default function ProductForm() {
   const [form, setForm] = useState(initialForm);
   const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
@@ -52,11 +55,22 @@ export default function ProductForm() {
             isActive: p.isActive !== undefined ? p.isActive : true,
           });
           setImages(p.images || []);
+          setVehicles(
+            (p.compatibleVehicles || []).map((v) => ({
+              make: v.make || '',
+              model: v.model || '',
+              yearFrom: v.yearFrom ?? '',
+              yearTo: v.yearTo ?? '',
+            }))
+          );
         })
         .catch(() => toast.error('No se pudo cargar el producto'))
         .finally(() => setLoading(false));
     }
   }, [id, isEditing]);
+
+  const updateVehicle = (idx, field, value) =>
+    setVehicles((prev) => prev.map((v, i) => (i === idx ? { ...v, [field]: value } : v)));
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -99,8 +113,18 @@ export default function ProductForm() {
       return;
     }
 
+    const compatibleVehicles = vehicles
+      .map((v) => ({
+        make: v.make.trim(),
+        model: v.model.trim(),
+        yearFrom: v.yearFrom ? Number(v.yearFrom) : null,
+        yearTo: v.yearTo ? Number(v.yearTo) : null,
+      }))
+      .filter((v) => v.make);
+
     const payload = {
       ...form,
+      compatibleVehicles,
       price: Number(form.price),
       comparePrice: form.comparePrice ? Number(form.comparePrice) : undefined,
       stock: Number(form.stock),
@@ -290,6 +314,60 @@ export default function ProductForm() {
                 disabled={uploadingImage}
               />
             </label>
+          </div>
+
+          {/* Vehículos compatibles */}
+          <div className="card p-6 space-y-4">
+            <h2 className="font-bold text-gray-900">Vehículos compatibles</h2>
+            <p className="text-sm text-gray-500">
+              Se usan para filtrar por marca, modelo y año en la tienda.
+            </p>
+
+            {vehicles.map((v, idx) => (
+              <div key={idx} className="grid grid-cols-2 sm:grid-cols-5 gap-2 items-center">
+                <input
+                  value={v.make}
+                  onChange={(e) => updateVehicle(idx, 'make', e.target.value)}
+                  className="input-field text-sm"
+                  placeholder="Marca (Toyota)"
+                />
+                <input
+                  value={v.model}
+                  onChange={(e) => updateVehicle(idx, 'model', e.target.value)}
+                  className="input-field text-sm"
+                  placeholder="Modelo (Corolla)"
+                />
+                <input
+                  type="number"
+                  value={v.yearFrom}
+                  onChange={(e) => updateVehicle(idx, 'yearFrom', e.target.value)}
+                  className="input-field text-sm"
+                  placeholder="Año desde"
+                />
+                <input
+                  type="number"
+                  value={v.yearTo}
+                  onChange={(e) => updateVehicle(idx, 'yearTo', e.target.value)}
+                  className="input-field text-sm"
+                  placeholder="Año hasta"
+                />
+                <button
+                  type="button"
+                  onClick={() => setVehicles((prev) => prev.filter((_, i) => i !== idx))}
+                  className="text-red-600 text-sm hover:underline"
+                >
+                  Quitar
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() => setVehicles((prev) => [...prev, { ...emptyVehicle }])}
+              className="btn-secondary text-sm"
+            >
+              + Agregar vehículo
+            </button>
           </div>
 
           {/* Opciones */}
