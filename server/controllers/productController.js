@@ -43,6 +43,19 @@ const getProducts = asyncHandler(async (req, res) => {
   if (req.query.category) where.categoryId = parseInt(req.query.category);
   if (req.query.brand) where.brand = { contains: req.query.brand, mode: 'insensitive' };
   if (req.query.featured === 'true') where.isFeatured = true;
+  if (req.query.make || req.query.model || req.query.year) {
+    const vehicle = {};
+    if (req.query.make) vehicle.make = { equals: req.query.make, mode: 'insensitive' };
+    if (req.query.model) vehicle.model = { equals: req.query.model, mode: 'insensitive' };
+    const year = parseInt(req.query.year);
+    if (!Number.isNaN(year)) {
+      vehicle.AND = [
+        { OR: [{ yearFrom: null }, { yearFrom: { lte: year } }] },
+        { OR: [{ yearTo: null }, { yearTo: { gte: year } }] },
+      ];
+    }
+    where.compatibleVehicles = { some: vehicle };
+  }
   if (req.query.search) {
     where.OR = [
       { name: { contains: req.query.search, mode: 'insensitive' } },
@@ -70,6 +83,22 @@ const getProducts = asyncHandler(async (req, res) => {
   ]);
 
   res.json({ products: products.map(mapProduct), page, pages: Math.ceil(total / limit), total });
+});
+
+// GET /api/products/vehicles -> [{ make, models: [] }]
+const getVehicleOptions = asyncHandler(async (_req, res) => {
+  const rows = await prisma.compatibleVehicle.findMany({
+    where: { product: { isActive: true }, make: { not: null } },
+    select: { make: true, model: true },
+    distinct: ['make', 'model'],
+    orderBy: [{ make: 'asc' }, { model: 'asc' }],
+  });
+  const byMake = new Map();
+  for (const { make, model } of rows) {
+    if (!byMake.has(make)) byMake.set(make, []);
+    if (model) byMake.get(make).push(model);
+  }
+  res.json([...byMake].map(([make, models]) => ({ make, models })));
 });
 
 // GET /api/products/featured
@@ -276,6 +305,7 @@ const deleteImage = asyncHandler(async (req, res) => {
 
 module.exports = {
   getProducts,
+  getVehicleOptions,
   getFeaturedProducts,
   getProductBySlug,
   getProductById,

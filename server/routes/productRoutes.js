@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getProducts,
+  getVehicleOptions,
   getFeaturedProducts,
   getProductBySlug,
   getProductById,
@@ -18,6 +19,7 @@ const { upload } = require('../utils/upload');
 // Rutas públicas
 router.get('/', getProducts);
 router.get('/featured', getFeaturedProducts);
+router.get('/vehicles', getVehicleOptions);
 router.get('/slug/:slug', getProductBySlug);
 
 // Rutas admin

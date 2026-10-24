@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { productsAPI, categoriesAPI } from '../services/api.js';
@@ -21,10 +21,17 @@ export default function Products() {
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
+  const [make, setMake] = useState(searchParams.get('make') || '');
+  const [model, setModel] = useState(searchParams.get('model') || '');
+  const [year, setYear] = useState(searchParams.get('year') || '');
+  const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
     categoriesAPI.getAll().then((r) => setCategories(r.data)).catch(console.error);
+    productsAPI.getVehicles().then((r) => setVehicles(r.data)).catch(console.error);
   }, []);
+
+  const modelOptions = vehicles.find((v) => v.make === make)?.models || [];
 
   const fetchProducts = useCallback(() => {
     setLoading(true);
@@ -33,6 +40,9 @@ export default function Products() {
     if (selectedCategory) params.category = selectedCategory;
     if (minPrice) params.minPrice = minPrice;
     if (maxPrice) params.maxPrice = maxPrice;
+    if (make) params.make = make;
+    if (model) params.model = model;
+    if (year) params.year = year;
 
     productsAPI
       .getAll(params)
@@ -43,7 +53,7 @@ export default function Products() {
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [page, search, selectedCategory, sort, minPrice, maxPrice]);
+  }, [page, search, selectedCategory, sort, minPrice, maxPrice, make, model, year]);
 
   useEffect(() => {
     fetchProducts();
@@ -57,6 +67,9 @@ export default function Products() {
     if (sort) params.sort = sort;
     if (minPrice) params.minPrice = minPrice;
     if (maxPrice) params.maxPrice = maxPrice;
+    if (make) params.make = make;
+    if (model) params.model = model;
+    if (year) params.year = year;
     setSearchParams(params);
     setFiltersOpen(false);
   };
@@ -67,14 +80,52 @@ export default function Products() {
     setSort('newest');
     setMinPrice('');
     setMaxPrice('');
+    setMake('');
+    setModel('');
+    setYear('');
     setPage(1);
     setSearchParams({});
   };
 
-  const hasFilters = search || selectedCategory || minPrice || maxPrice;
+  const hasFilters = search || selectedCategory || minPrice || maxPrice || make || model || year;
 
   const FilterPanel = () => (
     <div className="space-y-6">
+      <div>
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Vehículo</h3>
+        <div className="space-y-2">
+          <select
+            value={make}
+            onChange={(e) => { setMake(e.target.value); setModel(''); }}
+            className="input-field text-sm"
+          >
+            <option value="">Todas las marcas</option>
+            {vehicles.map((v) => (
+              <option key={v.make} value={v.make}>{v.make}</option>
+            ))}
+          </select>
+          <select
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            disabled={!make}
+            className="input-field text-sm"
+          >
+            <option value="">Todos los modelos</option>
+            {modelOptions.map((m) => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Año"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            className="input-field text-sm"
+            min="1950"
+            max="2100"
+          />
+        </div>
+      </div>
       <div>
         <h3 className="text-sm font-semibold text-gray-900 mb-3">Categoría</h3>
         <div className="space-y-2">
@@ -198,7 +249,7 @@ export default function Products() {
           <aside className="hidden lg:block w-64 flex-shrink-0">
             <div className="card p-4 sticky top-24">
               <h2 className="font-bold text-gray-900 mb-4">Filtros</h2>
-              <FilterPanel />
+              {FilterPanel()}
             </div>
           </aside>
 
@@ -211,7 +262,7 @@ export default function Products() {
                   <h2 className="font-bold text-gray-900">Filtros</h2>
                   <button onClick={() => setFiltersOpen(false)} className="p-1">✕</button>
                 </div>
-                <FilterPanel />
+                {FilterPanel()}
               </div>
             </>
           )}

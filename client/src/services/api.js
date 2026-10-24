@@ -39,6 +39,7 @@ export const authAPI = {
 export const productsAPI = {
   getAll: (params) => api.get('/products', { params }),
   getFeatured: () => api.get('/products/featured'),
+  getVehicles: () => api.get('/products/vehicles'),
   getBySlug: (slug) => api.get(`/products/slug/${slug}`),
   getById: (id) => api.get(`/products/${id}`),
   adminGetAll: (params) => api.get('/products/admin/all', { params }),
